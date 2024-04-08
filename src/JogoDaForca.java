@@ -10,11 +10,12 @@ public class JogoDaForca {
     private String[] palavra;
     private ArrayList<String> palavraAdivinhada;
     private String dicaPalavra;
-    private int tentativas = 6;
+    private int penalidades = 0;
     private int acertos = 0;
     private ArrayList<String> bancoPalavras = new ArrayList<String>();
     private ArrayList<String> bancoDicas = new ArrayList<String>();
-    public ArrayList<String> pilhaLetras = new ArrayList<String>();
+    private ArrayList<String> pilhaLetras = new ArrayList<String>();
+    private ArrayList<String> nomePenalidades = new ArrayList<String>();
 
     /////////////////////////////////
     /////////////////////////////////
@@ -28,20 +29,32 @@ public class JogoDaForca {
     /////////////////////////////////
 
     public JogoDaForca() throws Exception{
+
+        //Lê cada linha do arquivo palavras.txt e separa as palavras no atributo bancoPalavras
+        //e as dicas no atributo bancoDicas.
         InputStream stream = this.getClass().getResourceAsStream("/dados/palavras.txt");
 		if (stream == null)
 			throw new Exception("Arquivo de palavras inexistente");
         Scanner arquivo = new Scanner(stream);
-
-        // leitura das linhas do arquivo para as respectivas listas
 		String linha;
 		while (arquivo.hasNext()) {
 			linha = arquivo.nextLine().toUpperCase();
-			//System.out.println(linha);
 			this.bancoPalavras.add(linha.split(";")[0]);
 			this.bancoDicas.add(linha.split(";")[1]);
 		}
 		arquivo.close();
+
+        //Lê cada linha do arquivo penalidades.txt e separa as palavras no atributo nomePenalidades
+        InputStream stream2 = this.getClass().getResourceAsStream("/dados/penalidades.txt");
+		if (stream2 == null)
+			throw new Exception("Arquivo de palavras inexistente");
+        Scanner arquivo2 = new Scanner(stream2);
+		String linha2;
+		while (arquivo2.hasNext()) {
+			linha2 = arquivo2.nextLine().toUpperCase();
+			this.nomePenalidades.add(linha2);		
+		}
+		arquivo2.close();
     }
 
     public void iniciar(){
@@ -56,7 +69,11 @@ public class JogoDaForca {
         }
     }
 
+    /**
+     * Mostra o tamanho da palavra
+     */
     public int getTamanho(){
+        
         return palavra.length;
     }
 
@@ -98,13 +115,13 @@ public class JogoDaForca {
         if(ocorrencias.size() > 0){
             return ocorrencias;
         }else{
-            this.tentativas --;
+            this.penalidades ++;
             return ocorrencias;
         }
     }
 
     public boolean terminou(){
-        return this.tentativas == 0 || this.acertos == this.palavra.length;
+        return this.penalidades == 6 || this.acertos == this.palavra.length;
     }
 
     public String getPalavraAdivinhada(){
@@ -120,18 +137,17 @@ public class JogoDaForca {
     }
 
     public int getNumeroPenalidade(){
-        return 0;
-        //DICIONARIO PARA AS PENALIDADES
+        return this.penalidades;
     }
 
     public String getNomePenalidade(){
-        return null;
-        //DICIONARIO PARA AS PENALIDADES
+        return this.nomePenalidades.get(this.penalidades);
+       
     }
 
     public String getResultado(){
         if(this.acertos == this.palavra.length) return "Você venceu!";
-        else if (this.tentativas == 0) return "Você foi enforcado.";     
+        else if (this.penalidades == 6) return "Você foi enforcado.";     
         else return "Em andamento";
     }
 }
