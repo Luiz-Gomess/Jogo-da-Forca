@@ -51,6 +51,7 @@ public class AplicacaoConsole {
 			System.out.println("letras adivinhadas = " + jogo.getPalavraAdivinhada());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			
 		}
 	}
 

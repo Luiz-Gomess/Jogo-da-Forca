@@ -37,7 +37,7 @@ public class JogoDaForca {
     	this.terminou = false;
     	this.pilhaLetras.clear();
     }
-    //////// TIRAR NO FINAL /////////
+    /////////////////////////////////
     /////////////////////////////////
 
     public JogoDaForca() throws Exception{
@@ -96,39 +96,41 @@ public class JogoDaForca {
     public ArrayList<Integer> getOcorrencias(String letra) throws Exception{
         ArrayList<Integer> ocorrencias = new ArrayList<>();
 
+        //Deixa o argumento passado em maiúsculo para fazer a comparação.
         String letraM = letra.toUpperCase();
-        if(letraM.length() != 0) {
-	        if(letraM.length() == 1){
-	            if(!letraM.isBlank()){
-	                if (letraM.matches("[A-Z]")){
-	                    if (this.pilhaLetras.contains(letraM) == false){
-	                    	this.pilhaLetras.add(letraM);
-	                        for(int i = 0; i < this.palavra.length; i++){
-	                            if(this.palavra[i].equals(letraM)){
-	                                this.acertos ++;
-	                                this.palavraAdivinhada.set(i,letraM);
-	                                ocorrencias.add(i);
-	                                
-	                                if(this.acertos == this.palavra.length) {
-	                                this.terminou = true;
-	                                }
-	                            }
-	                        }
-	                    }   
-	                    else{ 
-	                    throw new Exception("Letra já escolhida.");}
-	                }
-	                else
-	                throw new Exception("Digite uma letra do alfabeto");
-	            }
-	            else 
-	            throw new Exception("Não deixe o espaço em branco, digite uma letra.");
-	        }
-	        else
-	        throw new Exception("Você deve digitar somente uma letra.");
+        //Confere se o argumento é um espaço em branco.
+        if(!letraM.isBlank()){
+            //Confere se o argumento possui somente um caractere.
+            if(letraM.length() == 1){
+                //Confere se o argumento é uma letra do alfabeto.
+                if (letraM.matches("[A-Z]")){
+                    //Confere se a letra já foi escolhida a. Se não, adiciona-a.
+                    if (this.pilhaLetras.contains(letraM) == false){
+                        this.pilhaLetras.add(letraM);
+
+                        for(int i = 0; i < this.palavra.length; i++){
+                            if(this.palavra[i].equals(letraM)){
+                                this.acertos ++;
+                                this.palavraAdivinhada.set(i,letraM);
+                                ocorrencias.add(i);
+                                
+                                if(this.acertos == this.palavra.length) {
+                                this.terminou = true;
+                                }
+                            }
+                        }
+                    }   
+                    else{ 
+                    throw new Exception("Letra já escolhida.");}
+                }
+                else
+                throw new Exception("Digite uma letra do alfabeto");
+            }
+            else 
+            throw new Exception("Você deve digitar somente uma letra.");
         }
         else
-        throw new Exception ("Você deve digitar uma letra.");
+        throw new Exception("Não deixe o espaço em branco, digite uma letra.");
 
         if(ocorrencias.size() > 0){	
             return ocorrencias;

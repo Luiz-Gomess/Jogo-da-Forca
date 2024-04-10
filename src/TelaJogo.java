@@ -129,7 +129,7 @@ public class TelaJogo {
 		frame.getContentPane().add(plvrAdivinhadalbl);
 		
 		status = new JLabel("");
-		status.setBounds(310, 140, 114, 14);
+		status.setBounds(310, 140, 114, 33);
 		frame.getContentPane().add(status);
 		
 		nomePenalidadeLbl = new JLabel("");
@@ -164,41 +164,35 @@ public class TelaJogo {
 			        ArrayList<Integer> ocorrencias;
 			        try {
 			          ocorrencias = jogo.getOcorrencias(letra);
-			          if (ocorrencias.size() > 0) {
-			            JOptionPane.showMessageDialog(null, "Você acertou a letra = " + letra);
-			          } else {
-			        	  sizeImage.setIcon(bancoImagens.get(indice));
-			        	  indice ++;
-			        	  nomePenalidadeLbl.setText(jogo.getNomePenalidade());
-			              JOptionPane.showMessageDialog(null, "Você errou a letra = " + letra + "\n" + jogo.getNomePenalidade());
-			          }
+					    if (ocorrencias.size() > 0) 
+							JOptionPane.showMessageDialog(null, "Você acertou a letra = " + letra);
+			            else {
+							sizeImage.setIcon(bancoImagens.get(indice));
+							indice ++;
+							nomePenalidadeLbl.setText(jogo.getNomePenalidade());
+							JOptionPane.showMessageDialog(null, "Você errou a letra = " + letra + "\n" + jogo.getNomePenalidade());
+			            }
 
-			          int penalidades = jogo.getNumeroPenalidade();
-			          int acertos = jogo.getAcertos();
+						int penalidades = jogo.getNumeroPenalidade();
+						int acertos = jogo.getAcertos();
 
-			          penalidadesTextLabel.setText(penalidades + "");
-			          acertosTextLabel.setText(acertos + "");
-			          plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
+						penalidadesTextLabel.setText(penalidades + "");
+						acertosTextLabel.setText(acertos + "");
+						plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
 			          
 			          
-			          if(jogo.terminou() == true ) {
-			        	  JOptionPane.showMessageDialog(null, jogo.getResultado(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
-			        	  status.setText(jogo.getResultado());
-			          }
-
-			        } catch (Exception e) {
-			          JOptionPane.showMessageDialog(null, e.getMessage());
-			        }
+						if(jogo.terminou() == true ) {
+							JOptionPane.showMessageDialog(null, jogo.getResultado(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
+							status.setText(jogo.getResultado());
+						}
+			        }catch (Exception e) {
+			        	JOptionPane.showMessageDialog(null, e.getMessage());
+					}
 			      }
-			    });
-			    
-		
+				});
 			  } while (jogo.terminou());
-
-
-
 			} catch (Exception e) {
-			  System.out.println(e.getMessage());
+			  JOptionPane.showMessageDialog(null,e.getMessage());
 			}
 
 	}
