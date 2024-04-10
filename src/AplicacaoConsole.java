@@ -43,7 +43,7 @@ public class AplicacaoConsole {
 				catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
-			} while (!jogo.terminou());
+			} while (jogo.terminou() == false);
 
 			teclado.close();
 			System.out.println("\n");

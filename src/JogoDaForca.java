@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 
 
+
 public class JogoDaForca {
 
     private String[] palavra;
@@ -12,6 +13,7 @@ public class JogoDaForca {
     private String dicaPalavra;
     private int penalidades = 0;
     private int acertos = 0;
+    private boolean terminou = false;
     private ArrayList<String> bancoPalavras = new ArrayList<String>();
     private ArrayList<String> bancoDicas = new ArrayList<String>();
     private ArrayList<String> pilhaLetras = new ArrayList<String>();
@@ -24,6 +26,16 @@ public class JogoDaForca {
             System.out.print(palavra[i]);
         }
         System.out.println();
+    }
+    
+    public void adminRESETA_JOGO() {
+    	this.palavra = null;
+    	this.palavraAdivinhada = null;
+    	this.dicaPalavra = null;
+    	this.penalidades = 0;
+    	this.acertos = 0;
+    	this.terminou = false;
+    	this.pilhaLetras.clear();
     }
     //////// TIRAR NO FINAL /////////
     /////////////////////////////////
@@ -85,43 +97,52 @@ public class JogoDaForca {
         ArrayList<Integer> ocorrencias = new ArrayList<>();
 
         String letraM = letra.toUpperCase();
-
-        if(letraM.length() == 1){
-            if(!letraM.isBlank()){
-                if (letraM.matches("[A-Z]")){
-                    if (this.pilhaLetras.contains(letraM) == false){
-                        for(int i = 0; i < this.palavra.length; i++){
-                            if(this.palavra[i].equals(letraM)){
-                                this.acertos ++;
-                                this.palavraAdivinhada.set(i,letraM);
-                                ocorrencias.add(i);
-                                this.pilhaLetras.add(letraM);
-                            }
-                        }
-                    }   
-                    else{ 
-                    throw new Exception("Letra já escolhida.");}
-                }
-                else
-                throw new Exception("Digite um caractere do alfabeto");
-            }
-            else 
-            throw new Exception("Não deixe o espaço em branco, digite uma letra.");
+        if(letraM.length() != 0) {
+	        if(letraM.length() == 1){
+	            if(!letraM.isBlank()){
+	                if (letraM.matches("[A-Z]")){
+	                    if (this.pilhaLetras.contains(letraM) == false){
+	                    	this.pilhaLetras.add(letraM);
+	                        for(int i = 0; i < this.palavra.length; i++){
+	                            if(this.palavra[i].equals(letraM)){
+	                                this.acertos ++;
+	                                this.palavraAdivinhada.set(i,letraM);
+	                                ocorrencias.add(i);
+	                                
+	                                if(this.acertos == this.palavra.length) {
+	                                this.terminou = true;
+	                                }
+	                            }
+	                        }
+	                    }   
+	                    else{ 
+	                    throw new Exception("Letra já escolhida.");}
+	                }
+	                else
+	                throw new Exception("Digite uma letra do alfabeto");
+	            }
+	            else 
+	            throw new Exception("Não deixe o espaço em branco, digite uma letra.");
+	        }
+	        else
+	        throw new Exception("Você deve digitar somente uma letra.");
         }
         else
-        throw new Exception("Você deve digitar somente uma letra.");
-        
-       
-        if(ocorrencias.size() > 0){
+        throw new Exception ("Você deve digitar uma letra.");
+
+        if(ocorrencias.size() > 0){	
             return ocorrencias;
         }else{
             this.penalidades ++;
+            if(this.penalidades == 6) {
+            	this.terminou = true;
+            }
             return ocorrencias;
         }
     }
 
     public boolean terminou(){
-        return this.penalidades == 6 || this.acertos == this.palavra.length;
+        return this.terminou;
     }
 
     public String getPalavraAdivinhada(){
@@ -148,6 +169,6 @@ public class JogoDaForca {
     public String getResultado(){
         if(this.acertos == this.palavra.length) return "Você venceu!";
         else if (this.penalidades == 6) return "Você foi enforcado.";     
-        else return "Em andamento";
+        else return "Em andamento...";
     }
 }
