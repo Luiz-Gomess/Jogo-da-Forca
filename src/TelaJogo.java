@@ -80,10 +80,12 @@ public class TelaJogo {
 		letraTextPane = new JTextPane();
 		letraTextPane.setBounds(310, 176, 114, 20);
 		frame.getContentPane().add(letraTextPane);
+		letraTextPane.setEnabled(false);
 		
 		btnADIVINHAR = new JButton("ADIVINHAR");
 		btnADIVINHAR.setBounds(310, 207, 114, 23);
 		frame.getContentPane().add(btnADIVINHAR);
+		btnADIVINHAR.setEnabled(false);
 		
 		lblNewLabel_2 = new JLabel("0");
 		lblNewLabel_2.setBounds(92, 211, 46, 14);
@@ -139,7 +141,6 @@ public class TelaJogo {
 		try {
 			  JogoDaForca jogo = new JogoDaForca();
 			  
-
 			  iniciar.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 			      jogo.adminRESETA_JOGO();
@@ -154,6 +155,8 @@ public class TelaJogo {
 			      sizeImage.setIcon(icon);
 			      status.setText(jogo.getResultado());
 			      nomePenalidadeLbl.setText(jogo.getNomePenalidade());
+				  letraTextPane.setEnabled(true);
+				  btnADIVINHAR.setEnabled(true);
 			    }
 			  });
 
@@ -164,6 +167,7 @@ public class TelaJogo {
 			        ArrayList<Integer> ocorrencias;
 			        try {
 			          ocorrencias = jogo.getOcorrencias(letra);
+					 
 					    if (ocorrencias.size() > 0) 
 							JOptionPane.showMessageDialog(null, "Você acertou a letra = " + letra);
 			            else {
@@ -172,7 +176,7 @@ public class TelaJogo {
 							nomePenalidadeLbl.setText(jogo.getNomePenalidade());
 							JOptionPane.showMessageDialog(null, "Você errou a letra = " + letra + "\n" + jogo.getNomePenalidade());
 			            }
-
+						letraTextPane.setText("");
 						int penalidades = jogo.getNumeroPenalidade();
 						int acertos = jogo.getAcertos();
 
@@ -180,10 +184,11 @@ public class TelaJogo {
 						acertosTextLabel.setText(acertos + "");
 						plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
 			          
-			          
 						if(jogo.terminou() == true ) {
 							JOptionPane.showMessageDialog(null, jogo.getResultado(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
 							status.setText(jogo.getResultado());
+							letraTextPane.setEnabled(false);
+							btnADIVINHAR.setEnabled(false);
 						}
 			        }catch (Exception e) {
 			        	JOptionPane.showMessageDialog(null, e.getMessage());

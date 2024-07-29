@@ -81,11 +81,7 @@ public class JogoDaForca {
         }
     }
 
-    /**
-     * Mostra o tamanho da palavra
-     */
     public int getTamanho(){
-        
         return palavra.length;
     }
 
@@ -120,8 +116,8 @@ public class JogoDaForca {
                             }
                         }
                     }   
-                    else{ 
-                    throw new Exception("Letra já escolhida.");}
+                    else
+                    throw new Exception("Letra já escolhida.");
                 }
                 else
                 throw new Exception("Digite uma letra do alfabeto");
