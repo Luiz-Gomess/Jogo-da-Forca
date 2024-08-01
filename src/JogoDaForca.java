@@ -3,9 +3,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-
-
-
 public class JogoDaForca {
 
     private String[] palavra;
@@ -18,27 +15,6 @@ public class JogoDaForca {
     private ArrayList<String> bancoDicas = new ArrayList<String>();
     private ArrayList<String> pilhaLetras = new ArrayList<String>();
     private ArrayList<String> nomePenalidades = new ArrayList<String>();
-
-    /////////////////////////////////
-    /////////////////////////////////
-    public void adminGetPalavra(){
-        for(int i = 0; i < this.palavra.length; i++){
-            System.out.print(palavra[i]);
-        }
-        System.out.println();
-    }
-    
-    public void adminRESETA_JOGO() {
-    	this.palavra = null;
-    	this.palavraAdivinhada = null;
-    	this.dicaPalavra = null;
-    	this.penalidades = 0;
-    	this.acertos = 0;
-    	this.terminou = false;
-    	this.pilhaLetras.clear();
-    }
-    /////////////////////////////////
-    /////////////////////////////////
 
     public JogoDaForca() throws Exception{
 
@@ -68,13 +44,18 @@ public class JogoDaForca {
 		}
 		arquivo2.close();
     }
-
+    /**
+     * Inicia o jogo.
+     */
     public void iniciar(){
+        //Instancia um objeto random para a criação de um indice temporario
         Random random = new Random();
         int indiceRandom = random.nextInt(bancoPalavras.size());
+        //Com o indice criado, seleciona um elemento do ArrayList bancoPalavras e do bancoDicas.
         this.palavra = bancoPalavras.get(indiceRandom).split("");
         this.dicaPalavra = bancoDicas.get(indiceRandom);
-
+        //Cria um ArrayList para armazenar a palavra adivinhada pelo usuário no decorrer do jogo.
+        //Esse ArrayList tem o mesmo tamanho da palavra original e é inicialmente preenchido com '*' 
         this.palavraAdivinhada = new ArrayList<>(this.palavra.length);
         for(int i = 0; i < this.palavra.length; i++){
             this.palavraAdivinhada.add("*");
@@ -82,56 +63,52 @@ public class JogoDaForca {
     }
 
     /**
-     * Mostra o tamanho da palavra
+     * Retorna o tamanho da palavra
      */
     public int getTamanho(){
-        
         return palavra.length;
     }
-
+    /**
+     * Retorna a dica da palavra
+     */
     public String getDica(){
         return this.dicaPalavra;
     }
 
+
     public ArrayList<Integer> getOcorrencias(String letra) throws Exception{
+
         ArrayList<Integer> ocorrencias = new ArrayList<>();
 
-        //Deixa o argumento passado em maiúsculo para fazer a comparação.
-        String letraM = letra.toUpperCase();
-        //Confere se o argumento é um espaço em branco.
-        if(!letraM.isBlank()){
-            //Confere se o argumento possui somente um caractere.
-            if(letraM.length() == 1){
-                //Confere se o argumento é uma letra do alfabeto.
-                if (letraM.matches("[A-Z]")){
-                    //Confere se a letra já foi escolhida a. Se não, adiciona-a.
-                    if (this.pilhaLetras.contains(letraM) == false){
-                        this.pilhaLetras.add(letraM);
-
-                        for(int i = 0; i < this.palavra.length; i++){
-                            if(this.palavra[i].equals(letraM)){
-                                this.acertos ++;
-                                this.palavraAdivinhada.set(i,letraM);
-                                ocorrencias.add(i);
-                                
-                                if(this.acertos == this.palavra.length) {
-                                this.terminou = true;
-                                }
-                            }
-                        }
-                    }   
-                    else{ 
-                    throw new Exception("Letra já escolhida.");}
-                }
-                else
-                throw new Exception("Digite uma letra do alfabeto");
-            }
-            else 
-            throw new Exception("Você deve digitar somente uma letra.");
-        }
-        else
+        //Confere se a letra é um espaço em branco.
+        if(letra.isBlank())
         throw new Exception("Não deixe o espaço em branco, digite uma letra.");
 
+        //Confere se a letra possui somente um caractere.
+        if(letra.length() != 1) 
+        throw new Exception("Você deve digitar somente uma letra.");
+
+        //Confere se é uma letra do alfabeto.
+        if (!letra.matches("([A-Z]|[a-z])"))
+        throw new Exception("Digite uma letra do alfabeto");
+
+        //Confere se a letra já foi escolhida a. Se não, adiciona-a.
+        if (this.pilhaLetras.contains(letra.toLowerCase()) == true || this.pilhaLetras.contains(letra.toUpperCase()) == true)
+        throw new Exception("Letra já escolhida.");
+
+        this.pilhaLetras.add(letra);
+
+        for(int i = 0; i < this.palavra.length; i++){
+            if(this.palavra[i].equalsIgnoreCase(letra)){
+                this.acertos ++;
+                this.palavraAdivinhada.set(i,letra);
+                ocorrencias.add(i);
+                
+                if(this.acertos == this.palavra.length) 
+                this.terminou = true;         
+            }
+        }            
+        
         if(ocorrencias.size() > 0){	
             return ocorrencias;
         }else{
@@ -142,7 +119,6 @@ public class JogoDaForca {
             return ocorrencias;
         }
     }
-
     public boolean terminou(){
         return this.terminou;
     }
@@ -165,7 +141,6 @@ public class JogoDaForca {
 
     public String getNomePenalidade(){
         return this.nomePenalidades.get(this.penalidades);
-       
     }
 
     public String getResultado(){
@@ -173,4 +148,23 @@ public class JogoDaForca {
         else if (this.penalidades == 6) return "Você foi enforcado.";     
         else return "Em andamento...";
     }
+
+        /** Métodos administrativos */
+        public void adminGetPalavra(){
+            for(int i = 0; i < this.palavra.length; i++){
+                System.out.print(palavra[i]);
+            }
+            System.out.println();
+        }
+        
+        public void adminRESETA_JOGO() {
+            this.palavra = null;
+            this.palavraAdivinhada = null;
+            this.dicaPalavra = null;
+            this.penalidades = 0;
+            this.acertos = 0;
+            this.terminou = false;
+            this.pilhaLetras.clear();
+        }
+        /** */
 }
