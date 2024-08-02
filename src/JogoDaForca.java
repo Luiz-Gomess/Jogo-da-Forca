@@ -3,9 +3,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-
-
-
 public class JogoDaForca {
 
     private String[] palavra;
@@ -89,44 +86,39 @@ public class JogoDaForca {
         return this.dicaPalavra;
     }
 
-    public ArrayList<Integer> getOcorrencias(String letra) throws Exception{
+    public ArrayList<Integer> getOcorrencias(String letra) throws Exception {
+
         ArrayList<Integer> ocorrencias = new ArrayList<>();
-
-        //Deixa o argumento passado em maiúsculo para fazer a comparação.
         String letraM = letra.toUpperCase();
-        //Confere se o argumento é um espaço em branco.
-        if(!letraM.isBlank()){
-            //Confere se o argumento possui somente um caractere.
-            if(letraM.length() == 1){
-                //Confere se o argumento é uma letra do alfabeto.
-                if (letraM.matches("[A-Z]")){
-                    //Confere se a letra já foi escolhida a. Se não, adiciona-a.
-                    if (this.pilhaLetras.contains(letraM) == false){
-                        this.pilhaLetras.add(letraM);
 
-                        for(int i = 0; i < this.palavra.length; i++){
-                            if(this.palavra[i].equals(letraM)){
-                                this.acertos ++;
-                                this.palavraAdivinhada.set(i,letraM);
-                                ocorrencias.add(i);
-                                
-                                if(this.acertos == this.palavra.length) {
-                                this.terminou = true;
-                                }
-                            }
-                        }
-                    }   
-                    else
-                    throw new Exception("Letra já escolhida.");
-                }
-                else
-                throw new Exception("Digite uma letra do alfabeto");
-            }
-            else 
+        if(letraM.isBlank()){
+            throw new Exception("Não deixe o espaço em branco, digite uma letra.");
+        }
+
+        if(letraM.length() > 1) {
             throw new Exception("Você deve digitar somente uma letra.");
         }
-        else
-        throw new Exception("Não deixe o espaço em branco, digite uma letra.");
+
+        if (!letraM.matches("[A-Z]")) {
+            throw new Exception("Digite uma letra do alfabeto.");
+        }
+
+        if(this.pilhaLetras.contains(letraM)) {
+            throw new Exception("Letra já escolhida.");
+        }
+
+        this.pilhaLetras.add(letraM);
+
+        for(int i = 0; i < this.palavra.length; i++){
+            if(this.palavra[i].equals(letraM)){
+                this.acertos ++;
+                this.palavraAdivinhada.set(i,letraM);
+                ocorrencias.add(i);                
+                if(this.acertos == this.palavra.length) {
+                    this.terminou = true;
+                }
+            }
+        }
 
         if(ocorrencias.size() > 0){	
             return ocorrencias;
@@ -161,7 +153,6 @@ public class JogoDaForca {
 
     public String getNomePenalidade(){
         return this.nomePenalidades.get(this.penalidades);
-       
     }
 
     public String getResultado(){
