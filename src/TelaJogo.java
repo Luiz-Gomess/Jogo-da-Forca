@@ -2,7 +2,6 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -139,66 +138,69 @@ public class TelaJogo {
 		frame.getContentPane().add(nomePenalidadeLbl);
 		
 		try {
-			  JogoDaForca jogo = new JogoDaForca();
-			  
-			  iniciar.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent e) {
-			      jogo.adminRESETA_JOGO();
-			      jogo.iniciar();
-			      lblNewLabel_2.setText(jogo.getTamanho() + "");
-			      dicaTextLabel.setText(jogo.getDica());
-			      letraTextPane.setText(null);
-			      plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
-			      acertosTextLabel.setText("0");
-			      penalidadesTextLabel.setText("0");
-			      indice = 0;
-			      sizeImage.setIcon(icon);
-			      status.setText(jogo.getResultado());
-			      nomePenalidadeLbl.setText(jogo.getNomePenalidade());
-				  letraTextPane.setEnabled(true);
-				  btnADIVINHAR.setEnabled(true);
-			    }
-			  });
+			JogoDaForca jogo = new JogoDaForca();
+			iniciar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					jogo.adminRESETA_JOGO();
+					jogo.iniciar();
+					lblNewLabel_2.setText(jogo.getTamanho() + "");
+					dicaTextLabel.setText(jogo.getDica());
+					letraTextPane.setText(null);
+					plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
+					acertosTextLabel.setText("0");
+					penalidadesTextLabel.setText("0");
+					indice = 0;
+					sizeImage.setIcon(icon);
+					status.setText(jogo.getResultado());
+					nomePenalidadeLbl.setText(jogo.getNomePenalidade());
+					letraTextPane.setEnabled(true);
+					btnADIVINHAR.setEnabled(true);
+				}
+			});
 
-			  do {
-			    btnADIVINHAR.addActionListener(new ActionListener() {
-			      public void actionPerformed(ActionEvent ae) {
-			        String letra = letraTextPane.getText();
-			        ArrayList<Integer> ocorrencias;
-			        try {
-			          ocorrencias = jogo.getOcorrencias(letra);
-					 
-					    if (ocorrencias.size() > 0) 
-							JOptionPane.showMessageDialog(null, "Você acertou a letra = " + letra);
-			            else {
-							sizeImage.setIcon(bancoImagens.get(indice));
-							indice ++;
-							nomePenalidadeLbl.setText(jogo.getNomePenalidade());
-							JOptionPane.showMessageDialog(null, "Você errou a letra = " + letra + "\n" + jogo.getNomePenalidade());
-			            }
-						letraTextPane.setText("");
-						int penalidades = jogo.getNumeroPenalidade();
-						int acertos = jogo.getAcertos();
+			do {
+				btnADIVINHAR.addActionListener(new ActionListener() {
 
-						penalidadesTextLabel.setText(penalidades + "");
-						acertosTextLabel.setText(acertos + "");
-						plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
-			          
-						if(jogo.terminou() == true ) {
-							JOptionPane.showMessageDialog(null, jogo.getResultado(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
-							status.setText(jogo.getResultado());
-							letraTextPane.setEnabled(false);
-							btnADIVINHAR.setEnabled(false);
+					public void actionPerformed(ActionEvent ae) {
+						String letra = letraTextPane.getText();
+						ArrayList<Integer> ocorrencias;
+						
+						try {
+							ocorrencias = jogo.getOcorrencias(letra);
+						
+							if (ocorrencias.size() > 0) 
+								JOptionPane.showMessageDialog(null, "Você acertou a letra = " + letra);
+							else {
+								sizeImage.setIcon(bancoImagens.get(indice));
+								indice ++;
+								nomePenalidadeLbl.setText(jogo.getNomePenalidade());
+								JOptionPane.showMessageDialog(null, "Você errou a letra = " + letra + "\n" + jogo.getNomePenalidade());
+							}
+
+							letraTextPane.setText("");
+							int penalidades = jogo.getNumeroPenalidade();
+							int acertos = jogo.getAcertos();
+
+							penalidadesTextLabel.setText(penalidades + "");
+							acertosTextLabel.setText(acertos + "");
+							plvrAdivinhadalbl.setText(jogo.getPalavraAdivinhada());
+						
+							if(jogo.terminou() == true ) {
+								JOptionPane.showMessageDialog(null, jogo.getResultado(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
+								status.setText(jogo.getResultado());
+								letraTextPane.setEnabled(false);
+								btnADIVINHAR.setEnabled(false);
+							}
+						} catch (Exception e) {
+							letraTextPane.setText("");
+							JOptionPane.showMessageDialog(null, e.getMessage());
 						}
-			        }catch (Exception e) {
-			        	JOptionPane.showMessageDialog(null, e.getMessage());
-					}
-			      }
+			    	}
 				});
-			  } while (jogo.terminou());
-			} catch (Exception e) {
-			  JOptionPane.showMessageDialog(null,e.getMessage());
-			}
+			} while (jogo.terminou());
 
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}
 	}
 }
